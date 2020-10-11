@@ -1,8 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, View, FlatList} from 'react-native'
+import { StyleSheet, Text, View, FlatList, Alert, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import Header from './components/header'
 import TodoItems from './components/TodoItems'
 import AddTodo from './components/addTodo'
+// import Sanbox from './components/Sandbox'
 
 const App = () => {
   const[todos, setTodos] = React.useState([
@@ -17,17 +18,30 @@ const App = () => {
     })
   }
 
-  const submitHandler = text => {
-    setTodos((prevTodos) => {
-      return [
-        { text: text, key: Math.random().toString() },
-        ...prevTodos
-      ]
-    })
+  const submitHandler = (text) => {
+
+    if(text.length > 3){
+      setTodos((prevTodos) => {
+        return [
+          { text: text, key: Math.random().toString() },
+          ...prevTodos
+        ]
+      })
+    } else {
+      Alert.alert('Ops!', 'TODOS must be over 5 chars long', [
+        {text: 'Understood', onPress: () => console.log('alert closed')}
+      ])
+    }
+
   }
 
 
   return (
+    // <Sanbox/>
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss();
+      console.log('dismissed keyboard');
+    }}>
     <View style={styles.container}>
       {/* header */}
       <Header/>
@@ -43,8 +57,8 @@ const App = () => {
             />
         </View>
       </View>
-
     </View>
+    </TouchableWithoutFeedback>
   )
 }
 
@@ -55,9 +69,11 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 40,
+    flex: 1,
   },
   list: {
-    marginTop: 20
+    flex:1,
+    marginTop: 20,
   }
 })
 
