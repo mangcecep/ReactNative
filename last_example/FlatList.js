@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native'
+import { StyleSheet, Text, View, FlatList} from 'react-native'
 
 const App = () => {
   const[people, setPeople] = React.useState([
@@ -12,13 +12,6 @@ const App = () => {
     {name: 'Aulia', id: '7'},
   ])
 
-  const pressHandler = (id) => {
-    console.log(id);
-    setPeople((prevPepole) => {
-      return prevPepole.filter(person => person.id != id)
-    })
-  }
-
   return (
     <View style={styles.container}>
 
@@ -27,9 +20,7 @@ const App = () => {
       keyExtractor={(item) => item.id}
       data={people}
       renderItem={({item}) => (
-        <TouchableOpacity onPress={() => pressHandler(item.id)}>
-          <Text style={styles.item}>{item.name}</Text>
-        </TouchableOpacity>
+        <Text style={styles.item}>{item.name}</Text>
       )}
     />
 
