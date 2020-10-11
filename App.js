@@ -1,46 +1,49 @@
 import React from 'react'
-import { StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native'
+import { StyleSheet, Text, View, FlatList} from 'react-native'
+import Header from './components/header'
+import TodoItems from './components/TodoItems'
+import AddTodo from './components/addTodo'
 
 const App = () => {
-  const[people, setPeople] = React.useState([
-    {name: 'Cecep', id: '1'},
-    {name: 'Solihin', id: '2'},
-    {name: 'Yusup', id: '3'},
-    {name: 'Izzudin', id: '4'},
-    {name: 'Muhammad', id: '5'},
-    {name: 'Alfaqih', id: '6'},
-    {name: 'Aulia', id: '7'},
+  const[todos, setTodos] = React.useState([
+    {text: 'buy coffee', key: '1'},
+    {text: 'create an App', key: '2'},
+    {text: 'play on the switch', key: '3'},
   ])
 
-  const pressHandler = (id) => {
-    console.log(id);
-    setPeople((prevPepole) => {
-      return prevPepole.filter(person => person.id != id)
+  const pressHandler = (key) => {
+    setTodos((prevTodos) => {
+      return prevTodos.filter(todo => todo.key != key)
     })
   }
 
+  const submitHandler = text => {
+    setTodos((prevTodos) => {
+      return [
+        { text: text, key: Math.random().toString() },
+        ...prevTodos
+      ]
+    })
+  }
+
+
   return (
     <View style={styles.container}>
+      {/* header */}
+      <Header/>
+      <View style={styles.content}>
+        {/* to form */}
+        <AddTodo submitHandler={submitHandler}/>
+        <View style={styles.list}>
+          <FlatList 
+            data={todos}
+            renderItem={({item}) => (
+              <TodoItems item={item} pressHandler={pressHandler}/>
+            )}
+            />
+        </View>
+      </View>
 
-    <FlatList 
-      numColumns={2}
-      keyExtractor={(item) => item.id}
-      data={people}
-      renderItem={({item}) => (
-        <TouchableOpacity onPress={() => pressHandler(item.id)}>
-          <Text style={styles.item}>{item.name}</Text>
-        </TouchableOpacity>
-      )}
-    />
-
-      {/* <ScrollView>
-      {people.map(item=> (
-          <View key={item.key}>
-            <Text style={styles.item}>{item.name}</Text>
-          </View>
-        )
-      )}
-      </ScrollView> */}
     </View>
   )
 }
@@ -49,18 +52,12 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
     backgroundColor: '#fff',
-    paddingTop: 40,
-    paddingHorizontal: 20
-    // alignItems: 'center',
-    // justifyContent: 'center'
   },
-  item: {
-    marginTop: 24,
-    padding: 30,
-    backgroundColor: 'pink',
-    fontSize: 24,
-    marginHorizontal: 10,
-    marginTop: 24,
+  content: {
+    padding: 40,
+  },
+  list: {
+    marginTop: 20
   }
 })
 
